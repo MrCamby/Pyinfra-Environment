@@ -1,24 +1,27 @@
 from os import path
 from pyinfra import host, local
-from pyinfra.operations import apt
 
 def include_module(module_name):
     local.include(filename=path.join("modules", f"{module_name}.py"))
 
-if "apt" in host.data.dict():
-    include_module("apt")
+if "bareos" in host.groups:
+    local.include("modules/postgresql.py")
+    local.include("roles/bareos.py")
 
-if "ntp" in host.data.dict():
-    include_module("ntp")
+# if "apt" in host.data.dict():
+#     include_module("apt")
 
-if "nfs" in host.data.dict():
-    include_module("nfs")
+# if "ntp" in host.data.dict():
+#     include_module("ntp")
 
-if "mounts" in host.data.dict():
-    include_module("mounts")
+# if "nfs" in host.data.dict():
+#     include_module("nfs")
 
-if "cron" in host.data.dict():
-    include_module("cron")
+# if "mounts" in host.data.dict():
+#     include_module("mounts")
 
-if "postgresql" in host.data.dict():
-    include_module("postgresql")
+# if "cron" in host.data.dict():
+#     include_module("cron")
+
+# if "postgresql" in host.data.dict():
+#     include_module("postgresql")

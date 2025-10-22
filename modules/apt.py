@@ -1,14 +1,11 @@
 from pyinfra import host
 from pyinfra.operations import apt, server
 
-def install(packages: list[str]):
+if "install" in host.data.get("apt"):
     apt.packages(
         name="Install ({})".format(", ".join(host.data.get("apt")["install"])),
-        packages=packages,
+        packages=host.data.get("apt")["install"],
     )
-
-if "install" in host.data.get("apt"):
-    install(host.data.get("apt")["install"])
 
 if "auto_upgrade" in host.data.get("apt"):
     apt.packages(
