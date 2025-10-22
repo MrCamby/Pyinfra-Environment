@@ -1,0 +1,6 @@
+venv/
+
+inventories/*
+!inventories/example.py
+
+pyinfra-debug.log
