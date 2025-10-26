@@ -102,7 +102,7 @@ def install_bareosServer():
         )
         
     # TODO: Install Bareos WebUI
-    apt.packages(
+    install = apt.packages(
         name="Install WebUI",
         packages=["bareos-webui"]
     )
@@ -112,7 +112,7 @@ def install_bareosServer():
         commands=["a2enmod proxy proxy_fcgi", "a2enconf php*"],
     )
     
-    files.template(
+    admin = files.template(
         name="Create WebUI Admin",
         src=StringIO("""Console {
   Name = "admin"
@@ -127,13 +127,14 @@ def install_bareosServer():
         password=uiPassword
     )
     
-    services = ["bareos-director", "apache2"]
-    for service in services:
-        systemd.service(
-            name=f"Reload {service}",
-            service=f"{service}.service",
-            reloaded=True
-        )
+    if admin.changed or install.changed:
+        services = ["bareos-director", "apache2"]
+        for service in services:
+            systemd.service(
+                name=f"Reload {service}",
+                service=f"{service}.service",
+                reloaded=True
+            )
 # endregion
 
 # region Setup Bareos clients
